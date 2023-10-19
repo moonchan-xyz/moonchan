@@ -1,0 +1,1156 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "basePath": "/",
+    "paths": {
+        "/.well-known/webfinger": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "webfinger"
+                ],
+                "summary": "webfinger",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search webfinger object by account",
+                        "name": "resource",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "links": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                },
+                                "subject": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts": {
+            "post": {
+                "description": "Creates a user and account records. Returns an account access token for the app that initiated the request. The app should save this token for later, and should wait for the user to confirm their account by clicking a link in their email inbox.\nhttps://docs.joinmastodon.org/methods/accounts/#create",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Register an account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provide this header with `Bearer \u003cuser token\u003e` to gain authorized access to this API method.",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The desired username for the account",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The email address to be used for login",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The password to be used for login",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": " Whether the user agrees to the local rules, terms, and policies. These should be presented to the user in order to allow them to consent before setting this parameter to TRUE.",
+                        "name": "aggrement",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The language of the confirmation email that will be sent.",
+                        "name": "locale",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "If registrations require manual approval, this text will be reviewed by moderators.",
+                        "name": "reason",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The ID of the Account in the database.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Account"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/lookup": {
+            "get": {
+                "description": "Quickly lookup a username to see if it is available, skipping WebFinger resolution.\nhttps://docs.joinmastodon.org/methods/accounts/#lookup",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Lookup account ID from Webfinger address",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The username or Webfinger address to lookup.",
+                        "name": "acct",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Account"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/relationships": {
+            "get": {
+                "description": "Find out whether a given account is followed, blocked, muted, etc.\nhttps://docs.joinmastodon.org/methods/accounts/#relationships",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Check relationships to other accounts",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "description": "The username or Webfinger address to lookup.",
+                        "name": "id[]",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Relationship"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/update_credentials": {
+            "patch": {
+                "description": "Update the user’s display and preferences.\nhttps://docs.joinmastodon.org/methods/accounts/#update_credentials",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Update account credentials",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provide this header with `Bearer \u003cuser token\u003e` to gain authorized access to this API method.",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The display name to use for the profile.",
+                        "name": "account[display_name]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The account bio.",
+                        "name": "account[note]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "Avatar image encoded using multipart/form-data",
+                        "name": "account[avatar]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "Header image encoded using multipart/form-data",
+                        "name": "account[header]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether manual approval of follow requests is required.",
+                        "name": "account[locked]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether the account has a bot flag.",
+                        "name": "account[bot]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether the account should be shown in the profile directory.",
+                        "name": "account[discoverable]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][0][name]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][0][value]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][1][name]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][1][value]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][2][name]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][2][value]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][3][name]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hash",
+                        "name": "account[fields_attributes][3][value]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether the account should be shown in the profile directory.",
+                        "name": "account[discoverable]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether the account should be shown in the profile directory.",
+                        "name": "account[discoverable]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether the account should be shown in the profile directory.",
+                        "name": "account[discoverable]",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CredentialAccount"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/verify_credentials": {
+            "get": {
+                "description": "Test to make sure that the user token works.\nhttps://docs.joinmastodon.org/methods/accounts/#verify_credentials",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Verify account credentials",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provide this header with `Bearer \u003cuser token\u003e` to gain authorized access to this API method.",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CredentialAccount"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{id}": {
+            "get": {
+                "description": "View information about a profile.\nhttps://docs.joinmastodon.org/methods/accounts/#get",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Get account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provide this header with `Bearer \u003cuser token\u003e` to gain authorized access to this API method.",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The ID of the Account in the database.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Account"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{id}/followers": {
+            "get": {
+                "description": "Quickly lookup a username to see if it is available, skipping WebFinger resolution.\nhttps://docs.joinmastodon.org/methods/accounts/#lookup",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Lookup account ID from Webfinger address",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provide this header with `Bearer \u003cuser token\u003e` to gain authorized access to this API method.",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The ID of the Account in the database.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Internal parameter. Use HTTP Link header for pagination.",
+                        "name": "max_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Internal parameter. Use HTTP Link header for pagination.",
+                        "name": "since_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Internal parameter. Use HTTP Link header for pagination.",
+                        "name": "min_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum number of results to return. Defaults to 40 accounts. Max 80 accounts.",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/entities.Account"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{id}/statuses": {
+            "get": {
+                "description": "Statuses posted to the given account.\nhttps://docs.joinmastodon.org/methods/accounts/#statuses",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mastodon/accounts"
+                ],
+                "summary": "Get account’s statuses",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provide this header with `Bearer \u003cuser token\u003e` to gain authorized access to this API method.",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The ID of the Account in the database.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "All results returned will be lesser than this ID. In effect, sets an upper bound on results.",
+                        "name": "max_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "All results returned will be greater than this ID. In effect, sets a lower bound on results.",
+                        "name": "since_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Returns results immediately newer than this ID. In effect, sets a cursor at this ID and paginates forward.",
+                        "name": "min_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum number of results to return. Defaults to 20 statuses. Max 40 statuses.",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter out statuses without attachments.",
+                        "name": "only_media",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter out statuses in reply to a different account.",
+                        "name": "exclude_replies",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter out boosts from the response.",
+                        "name": "exclude_reblogs",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter for pinned statuses only. Defaults to false, which includes all statuses. Pinned statuses do not receive special priority in the order of the returned results.",
+                        "name": "pinned",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter for statuses using a specific hashtag.",
+                        "name": "tagged",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Status"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/mastodon.errorMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/echo": {
+            "get": {
+                "description": "return http request",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    ""
+                ],
+                "summary": "For test",
+                "responses": {
+                    "200": {
+                        "description": "return the http request received",
+                        "schema": {
+                            "type": "body"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "return http request",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    ""
+                ],
+                "summary": "For test",
+                "responses": {
+                    "200": {
+                        "description": "return the http request received",
+                        "schema": {
+                            "type": "body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "return http request",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    ""
+                ],
+                "summary": "For test",
+                "responses": {
+                    "200": {
+                        "description": "return the http request received",
+                        "schema": {
+                            "type": "body"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "return http request",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    ""
+                ],
+                "summary": "For test",
+                "responses": {
+                    "200": {
+                        "description": "return the http request received",
+                        "schema": {
+                            "type": "body"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "return http request",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    ""
+                ],
+                "summary": "For test",
+                "responses": {
+                    "200": {
+                        "description": "return the http request received",
+                        "schema": {
+                            "type": "body"
+                        }
+                    }
+                }
+            }
+        },
+        "/test": {
+            "post": {
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "test",
+                        "name": "something[somekey]",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The display name to use for the profile.",
+                        "name": "display_name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The account bio.",
+                        "name": "note",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Avatar image encoded using multipart/form-data",
+                        "name": "avatar",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header image encoded using multipart/form-data",
+                        "name": "header",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether manual approval of follow requests is required.",
+                        "name": "locked",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether the account has a bot flag.",
+                        "name": "bot",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Whether the account should be shown in the profile directory.",
+                        "name": "discoverable",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return the http request received",
+                        "schema": {
+                            "type": "body"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entities.Account": {
+            "type": "object",
+            "properties": {
+                "acct": {
+                    "description": "why \"index:acct,unique,type:text collate nocase\" not work",
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "avatar_static": {
+                    "type": "string"
+                },
+                "bot": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "discoverable": {
+                    "type": "boolean"
+                },
+                "display_name": {
+                    "type": "string"
+                },
+                "emojis": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.CustomEmoji"
+                    }
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.Field"
+                    }
+                },
+                "followers_count": {
+                    "type": "integer"
+                },
+                "following_count": {
+                    "type": "integer"
+                },
+                "group": {
+                    "type": "boolean"
+                },
+                "header": {
+                    "type": "string"
+                },
+                "header_static": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_status_at": {
+                    "type": "string"
+                },
+                "limited": {
+                    "description": "false if not set",
+                    "type": "boolean"
+                },
+                "locked": {
+                    "type": "boolean"
+                },
+                "moved": {
+                    "$ref": "#/definitions/entities.Account"
+                },
+                "noindex": {
+                    "type": "boolean"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "statuses_count": {
+                    "type": "integer"
+                },
+                "suspended": {
+                    "description": "false if not set",
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.CredentialAccount": {
+            "type": "object",
+            "properties": {
+                "acct": {
+                    "description": "why \"index:acct,unique,type:text collate nocase\" not work",
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "avatar_static": {
+                    "type": "string"
+                },
+                "bot": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "discoverable": {
+                    "type": "boolean"
+                },
+                "display_name": {
+                    "type": "string"
+                },
+                "emojis": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.CustomEmoji"
+                    }
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.Field"
+                    }
+                },
+                "followers_count": {
+                    "type": "integer"
+                },
+                "following_count": {
+                    "type": "integer"
+                },
+                "group": {
+                    "type": "boolean"
+                },
+                "header": {
+                    "type": "string"
+                },
+                "header_static": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_status_at": {
+                    "type": "string"
+                },
+                "limited": {
+                    "description": "false if not set",
+                    "type": "boolean"
+                },
+                "locked": {
+                    "type": "boolean"
+                },
+                "moved": {
+                    "$ref": "#/definitions/entities.Account"
+                },
+                "noindex": {
+                    "type": "boolean"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/entities.Role"
+                },
+                "source": {
+                    "$ref": "#/definitions/entities.Source"
+                },
+                "statuses_count": {
+                    "type": "integer"
+                },
+                "suspended": {
+                    "description": "false if not set",
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.CustomEmoji": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "shortcode": {
+                    "type": "string"
+                },
+                "static_url": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "visible_in_picker": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "entities.Field": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Field entity attributes",
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "verified_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Relationship": {
+            "type": "object",
+            "properties": {
+                "blocked_by": {
+                    "type": "boolean"
+                },
+                "blocking": {
+                    "type": "boolean"
+                },
+                "domain_blocking": {
+                    "type": "boolean"
+                },
+                "endorsed": {
+                    "type": "boolean"
+                },
+                "followed_by": {
+                    "type": "boolean"
+                },
+                "following": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "languages": {
+                    "type": "boolean"
+                },
+                "muting": {
+                    "type": "boolean"
+                },
+                "muting_notifications": {
+                    "type": "boolean"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "notifying": {
+                    "type": "boolean"
+                },
+                "requested": {
+                    "type": "boolean"
+                },
+                "showing_reblogs": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "entities.Role": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "highlighted": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.Source": {
+            "type": "object",
+            "properties": {
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.Field"
+                    }
+                },
+                "follow_requests_count": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "privacy": {
+                    "type": "string"
+                },
+                "sensitive": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "entities.Status": {
+            "type": "object"
+        },
+        "mastodon.errorMsg": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

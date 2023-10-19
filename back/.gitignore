@@ -1,0 +1,7 @@
+*.db
+*.exe
+back
+
+secret.go
+
+log.md

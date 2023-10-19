@@ -1,0 +1,797 @@
+basePath: /
+definitions:
+  entities.Account:
+    properties:
+      acct:
+        description: why "index:acct,unique,type:text collate nocase" not work
+        type: string
+      avatar:
+        type: string
+      avatar_static:
+        type: string
+      bot:
+        type: boolean
+      created_at:
+        type: string
+      discoverable:
+        type: boolean
+      display_name:
+        type: string
+      emojis:
+        items:
+          $ref: '#/definitions/entities.CustomEmoji'
+        type: array
+      fields:
+        items:
+          $ref: '#/definitions/entities.Field'
+        type: array
+      followers_count:
+        type: integer
+      following_count:
+        type: integer
+      group:
+        type: boolean
+      header:
+        type: string
+      header_static:
+        type: string
+      id:
+        type: string
+      last_status_at:
+        type: string
+      limited:
+        description: false if not set
+        type: boolean
+      locked:
+        type: boolean
+      moved:
+        $ref: '#/definitions/entities.Account'
+      noindex:
+        type: boolean
+      note:
+        type: string
+      statuses_count:
+        type: integer
+      suspended:
+        description: false if not set
+        type: boolean
+      url:
+        type: string
+      username:
+        type: string
+    type: object
+  entities.CredentialAccount:
+    properties:
+      acct:
+        description: why "index:acct,unique,type:text collate nocase" not work
+        type: string
+      avatar:
+        type: string
+      avatar_static:
+        type: string
+      bot:
+        type: boolean
+      created_at:
+        type: string
+      discoverable:
+        type: boolean
+      display_name:
+        type: string
+      emojis:
+        items:
+          $ref: '#/definitions/entities.CustomEmoji'
+        type: array
+      fields:
+        items:
+          $ref: '#/definitions/entities.Field'
+        type: array
+      followers_count:
+        type: integer
+      following_count:
+        type: integer
+      group:
+        type: boolean
+      header:
+        type: string
+      header_static:
+        type: string
+      id:
+        type: string
+      last_status_at:
+        type: string
+      limited:
+        description: false if not set
+        type: boolean
+      locked:
+        type: boolean
+      moved:
+        $ref: '#/definitions/entities.Account'
+      noindex:
+        type: boolean
+      note:
+        type: string
+      role:
+        $ref: '#/definitions/entities.Role'
+      source:
+        $ref: '#/definitions/entities.Source'
+      statuses_count:
+        type: integer
+      suspended:
+        description: false if not set
+        type: boolean
+      url:
+        type: string
+      username:
+        type: string
+    type: object
+  entities.CustomEmoji:
+    properties:
+      category:
+        type: string
+      shortcode:
+        type: string
+      static_url:
+        type: string
+      url:
+        type: string
+      visible_in_picker:
+        type: boolean
+    type: object
+  entities.Field:
+    properties:
+      name:
+        description: Field entity attributes
+        type: string
+      value:
+        type: string
+      verified_at:
+        type: string
+    type: object
+  entities.Relationship:
+    properties:
+      blocked_by:
+        type: boolean
+      blocking:
+        type: boolean
+      domain_blocking:
+        type: boolean
+      endorsed:
+        type: boolean
+      followed_by:
+        type: boolean
+      following:
+        type: boolean
+      id:
+        type: string
+      languages:
+        type: boolean
+      muting:
+        type: boolean
+      muting_notifications:
+        type: boolean
+      note:
+        type: string
+      notifying:
+        type: boolean
+      requested:
+        type: boolean
+      showing_reblogs:
+        type: boolean
+    type: object
+  entities.Role:
+    properties:
+      color:
+        type: string
+      highlighted:
+        type: boolean
+      id:
+        type: integer
+      name:
+        type: string
+      permissions:
+        type: integer
+    type: object
+  entities.Source:
+    properties:
+      fields:
+        items:
+          $ref: '#/definitions/entities.Field'
+        type: array
+      follow_requests_count:
+        type: integer
+      language:
+        type: string
+      note:
+        type: string
+      privacy:
+        type: string
+      sensitive:
+        type: boolean
+    type: object
+  entities.Status:
+    type: object
+  mastodon.errorMsg:
+    properties:
+      error:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /.well-known/webfinger:
+    get:
+      parameters:
+      - description: search webfinger object by account
+        in: query
+        name: resource
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              links:
+                items:
+                  type: object
+                type: array
+              subject:
+                type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: webfinger
+      tags:
+      - webfinger
+  /api/v1/accounts:
+    post:
+      description: |-
+        Creates a user and account records. Returns an account access token for the app that initiated the request. The app should save this token for later, and should wait for the user to confirm their account by clicking a link in their email inbox.
+        https://docs.joinmastodon.org/methods/accounts/#create
+      parameters:
+      - description: Provide this header with `Bearer <user token>` to gain authorized
+          access to this API method.
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: The desired username for the account
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: The email address to be used for login
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: The password to be used for login
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: ' Whether the user agrees to the local rules, terms, and policies.
+          These should be presented to the user in order to allow them to consent
+          before setting this parameter to TRUE.'
+        in: formData
+        name: aggrement
+        required: true
+        type: boolean
+      - description: The language of the confirmation email that will be sent.
+        in: formData
+        name: locale
+        required: true
+        type: string
+      - description: If registrations require manual approval, this text will be reviewed
+          by moderators.
+        in: formData
+        name: reason
+        type: string
+      - description: The ID of the Account in the database.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Account'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Register an account
+      tags:
+      - mastodon/accounts
+  /api/v1/accounts/{id}:
+    get:
+      description: |-
+        View information about a profile.
+        https://docs.joinmastodon.org/methods/accounts/#get
+      parameters:
+      - description: Provide this header with `Bearer <user token>` to gain authorized
+          access to this API method.
+        in: header
+        name: Authorization
+        type: string
+      - description: The ID of the Account in the database.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Account'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Get account
+      tags:
+      - mastodon/accounts
+  /api/v1/accounts/{id}/followers:
+    get:
+      description: |-
+        Quickly lookup a username to see if it is available, skipping WebFinger resolution.
+        https://docs.joinmastodon.org/methods/accounts/#lookup
+      parameters:
+      - description: Provide this header with `Bearer <user token>` to gain authorized
+          access to this API method.
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: The ID of the Account in the database.
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Internal parameter. Use HTTP Link header for pagination.
+        in: query
+        name: max_id
+        type: string
+      - description: Internal parameter. Use HTTP Link header for pagination.
+        in: query
+        name: since_id
+        type: string
+      - description: Internal parameter. Use HTTP Link header for pagination.
+        in: query
+        name: min_id
+        type: string
+      - description: Maximum number of results to return. Defaults to 40 accounts.
+          Max 80 accounts.
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/entities.Account'
+              type: array
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Lookup account ID from Webfinger address
+      tags:
+      - mastodon/accounts
+  /api/v1/accounts/{id}/statuses:
+    get:
+      description: |-
+        Statuses posted to the given account.
+        https://docs.joinmastodon.org/methods/accounts/#statuses
+      parameters:
+      - description: Provide this header with `Bearer <user token>` to gain authorized
+          access to this API method.
+        in: header
+        name: Authorization
+        type: string
+      - description: The ID of the Account in the database.
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: All results returned will be lesser than this ID. In effect,
+          sets an upper bound on results.
+        in: query
+        name: max_id
+        type: string
+      - description: All results returned will be greater than this ID. In effect,
+          sets a lower bound on results.
+        in: query
+        name: since_id
+        type: string
+      - description: Returns results immediately newer than this ID. In effect, sets
+          a cursor at this ID and paginates forward.
+        in: query
+        name: min_id
+        type: string
+      - description: Maximum number of results to return. Defaults to 20 statuses.
+          Max 40 statuses.
+        in: query
+        name: limit
+        type: integer
+      - description: Filter out statuses without attachments.
+        in: query
+        name: only_media
+        type: boolean
+      - description: Filter out statuses in reply to a different account.
+        in: query
+        name: exclude_replies
+        type: boolean
+      - description: Filter out boosts from the response.
+        in: query
+        name: exclude_reblogs
+        type: boolean
+      - description: Filter for pinned statuses only. Defaults to false, which includes
+          all statuses. Pinned statuses do not receive special priority in the order
+          of the returned results.
+        in: query
+        name: pinned
+        type: boolean
+      - description: Filter for statuses using a specific hashtag.
+        in: query
+        name: tagged
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Status'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Get account’s statuses
+      tags:
+      - mastodon/accounts
+  /api/v1/accounts/lookup:
+    get:
+      description: |-
+        Quickly lookup a username to see if it is available, skipping WebFinger resolution.
+        https://docs.joinmastodon.org/methods/accounts/#lookup
+      parameters:
+      - description: The username or Webfinger address to lookup.
+        in: query
+        name: acct
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Account'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Lookup account ID from Webfinger address
+      tags:
+      - mastodon/accounts
+  /api/v1/accounts/relationships:
+    get:
+      description: |-
+        Find out whether a given account is followed, blocked, muted, etc.
+        https://docs.joinmastodon.org/methods/accounts/#relationships
+      parameters:
+      - description: The username or Webfinger address to lookup.
+        in: query
+        name: id[]
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Relationship'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Check relationships to other accounts
+      tags:
+      - mastodon/accounts
+  /api/v1/accounts/update_credentials:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: |-
+        Update the user’s display and preferences.
+        https://docs.joinmastodon.org/methods/accounts/#update_credentials
+      parameters:
+      - description: Provide this header with `Bearer <user token>` to gain authorized
+          access to this API method.
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: The display name to use for the profile.
+        in: formData
+        name: account[display_name]
+        type: string
+      - description: The account bio.
+        in: formData
+        name: account[note]
+        type: string
+      - description: Avatar image encoded using multipart/form-data
+        in: formData
+        name: account[avatar]
+        type: file
+      - description: Header image encoded using multipart/form-data
+        in: formData
+        name: account[header]
+        type: file
+      - description: Whether manual approval of follow requests is required.
+        in: formData
+        name: account[locked]
+        type: boolean
+      - description: Whether the account has a bot flag.
+        in: formData
+        name: account[bot]
+        type: boolean
+      - description: Whether the account should be shown in the profile directory.
+        in: formData
+        name: account[discoverable]
+        type: boolean
+      - description: hash
+        in: formData
+        name: account[fields_attributes][0][name]
+        type: string
+      - description: hash
+        in: formData
+        name: account[fields_attributes][0][value]
+        type: string
+      - description: hash
+        in: formData
+        name: account[fields_attributes][1][name]
+        type: string
+      - description: hash
+        in: formData
+        name: account[fields_attributes][1][value]
+        type: string
+      - description: hash
+        in: formData
+        name: account[fields_attributes][2][name]
+        type: string
+      - description: hash
+        in: formData
+        name: account[fields_attributes][2][value]
+        type: string
+      - description: hash
+        in: formData
+        name: account[fields_attributes][3][name]
+        type: string
+      - description: hash
+        in: formData
+        name: account[fields_attributes][3][value]
+        type: string
+      - description: Whether the account should be shown in the profile directory.
+        in: formData
+        name: account[discoverable]
+        type: boolean
+      - description: Whether the account should be shown in the profile directory.
+        in: formData
+        name: account[discoverable]
+        type: boolean
+      - description: Whether the account should be shown in the profile directory.
+        in: formData
+        name: account[discoverable]
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CredentialAccount'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Update account credentials
+      tags:
+      - mastodon/accounts
+  /api/v1/accounts/verify_credentials:
+    get:
+      description: |-
+        Test to make sure that the user token works.
+        https://docs.joinmastodon.org/methods/accounts/#verify_credentials
+      parameters:
+      - description: Provide this header with `Bearer <user token>` to gain authorized
+          access to this API method.
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CredentialAccount'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/mastodon.errorMsg'
+      summary: Verify account credentials
+      tags:
+      - mastodon/accounts
+  /echo:
+    delete:
+      description: return http request
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: return the http request received
+          schema:
+            type: body
+      summary: For test
+      tags:
+      - ""
+    get:
+      description: return http request
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: return the http request received
+          schema:
+            type: body
+      summary: For test
+      tags:
+      - ""
+    patch:
+      description: return http request
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: return the http request received
+          schema:
+            type: body
+      summary: For test
+      tags:
+      - ""
+    post:
+      description: return http request
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: return the http request received
+          schema:
+            type: body
+      summary: For test
+      tags:
+      - ""
+    put:
+      description: return http request
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: return the http request received
+          schema:
+            type: body
+      summary: For test
+      tags:
+      - ""
+  /test:
+    post:
+      parameters:
+      - description: test
+        in: formData
+        name: something[somekey]
+        type: string
+      - description: The display name to use for the profile.
+        in: formData
+        name: display_name
+        type: string
+      - description: The account bio.
+        in: formData
+        name: note
+        type: string
+      - description: Avatar image encoded using multipart/form-data
+        in: formData
+        name: avatar
+        type: string
+      - description: Header image encoded using multipart/form-data
+        in: formData
+        name: header
+        type: string
+      - description: Whether manual approval of follow requests is required.
+        in: formData
+        name: locked
+        type: boolean
+      - description: Whether the account has a bot flag.
+        in: formData
+        name: bot
+        type: boolean
+      - description: Whether the account should be shown in the profile directory.
+        in: formData
+        name: discoverable
+        type: boolean
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: return the http request received
+          schema:
+            type: body
+schemes:
+- http
+swagger: "2.0"
