@@ -1,0 +1,105 @@
+## API METHODS
+- [x] **apps**
+- [x] oauth
+- [x] emails
+- [x] **accounts**
+- [x] bookmarks
+- [x] favourites
+- [x] mutes
+- [x] blocks
+- [x] domain_blocks
+- [ ] filters
+- [x] reports
+- [x] follow_requests
+- [x] endorsements
+- [ ] featured_tags
+- [x] preferences
+- [ ] followed_tags
+- [ ] suggestions
+- [ ] tags
+- [x] **profile**
+- [ ] **statuses**
+- [ ] media
+- [ ] polls
+- [ ] scheduled_statuses
+- [ ] **timelines**
+- [ ] conversations
+- [ ] lists
+- [ ] markers
+- [ ] streaming
+- [ ] **notifications**
+- [ ] push
+- [ ] **search**
+- [ ] **instance**
+- [ ] trends
+- [ ] directory
+- [ ] custom_emojis
+- [x] announcements
+- [ ] **admin**
+- [ ] admin/accounts
+- [ ] admin/domain_blocks
+- [ ] admin/reports
+- [ ] admin/trends
+- [ ] canonical_email_blocks
+- [ ] dimensions
+- [ ] domain_allows
+- [ ] email_domain_blocks
+- [ ] ip_blocks
+- [ ] measures
+- [ ] retention
+- [x] **proofs**
+- [x] **oembed**
+
+## API ENTITIES
+- [ ] Account
+- [ ] Admin::Account
+- [ ] Admin::CanonicalEmailBlock
+- [ ] Admin::Cohort
+- [ ] Admin::Dimension
+- [ ] Admin::DomainAllow
+- [ ] Admin::DomainBlock
+- [ ] Admin::EmailDomainBlock
+- [ ] Admin::Ip
+- [ ] Admin::IpBlock
+- [ ] Admin::Measure
+- [ ] Admin::Report
+- [ ] Announcement
+- [ ] Application
+- [ ] Context
+- [ ] Conversation
+- [ ] CustomEmoji
+- [ ] DomainBlock
+- [ ] Error
+- [ ] ExtendedDescription
+- [ ] FamiliarFollowers
+- [ ] FeaturedTag
+- [ ] Filter
+- [ ] FilterKeyword
+- [ ] FilterResult
+- [ ] FilterStatus
+- [ ] IdentityProof
+- [ ] Instance
+- [ ] List
+- [ ] Marker
+- [ ] MediaAttachment
+- [ ] Notification
+- [ ] Poll
+- [ ] Preferences
+- [ ] PreviewCard
+- [ ] Reaction
+- [ ] Relationship
+- [ ] Report
+- [ ] Role
+- [ ] Rule
+- [ ] ScheduledStatus
+- [ ] Search
+- [ ] Status
+- [ ] StatusEdit
+- [ ] StatusSource
+- [ ] Suggestion
+- [ ] Tag
+- [ ] Token
+- [ ] Translation
+- [ ] V1::Filter
+- [ ] V1::Instance
+- [ ] WebPushSubscription

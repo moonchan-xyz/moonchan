@@ -7,3 +7,5 @@ struct中*AnotherStructType 会被判断为外键，需要进行外键设置
 # Q
 
 外键怎么写啊
+
+需要做entities的json自己生成struct和基础的crud，array read

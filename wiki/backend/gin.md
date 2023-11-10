@@ -3,18 +3,25 @@
 MultipartForm怎么读啊啊啊 
 A: https://gin-gonic.com/docs/examples/upload-file/multiple-file/
 
+## 注意
+
+顺便为了同时写好swagger和gin的变量解析
+开了个从文档扒关键信息生成的repo
+去那边用吧。
+
+
 # api
 
 这里的进度是gin -> params的进度
 mastodon的进度去mastodon里面看
 
-- **apps**
+- [x] **apps**
   - 这又是啥
-- oauth
+- [x] oauth
   - 不会
-- emails
+- [x] emails
   - 这啥？
-- **accounts**
+- [x] **accounts**
   - [x] Register an account
     - [ ] token 回了个啥啊
     - [ ] key 要确认一下
@@ -51,25 +58,25 @@ mastodon的进度去mastodon里面看
     - 跳过? 但是是搜索
   - [x] Lookup account ID from Webfinger address
   - [ ] (DEPRECATED) Identity proofs
-- bookmarks
-- favourites
-- mutes
-- blocks
-- domain_blocks
+- [x] bookmarks
+- [x] favourites
+- [x] mutes
+- [x] blocks
+- [x] domain_blocks
 - filters
-- reports
-- follow_requests
+- [x] reports
+- [x] follow_requests
   - [x] View pending follow requests
   - [x] Accept follow request
   - [x] Reject follow request
-- dorsements
+- [x] endorsements
 - featured_tags
-- preferences
+- [x] preferences
   - [x] View user preferences
 - followed_tags
 - suggestions
 - tags
-- **profile**
+- [x] **profile**
   - [x] Delete profile avatar
   - [x] Delete profile header
 - **statuses**
@@ -121,7 +128,7 @@ mastodon的进度去mastodon里面看
 - trends
 - directory
 - custom_emojis
-- announcements
+- [x] announcements
 - **admin**
 - admin/accounts
 - admin/domain_blocks
@@ -134,8 +141,8 @@ mastodon的进度去mastodon里面看
 - ip_blocks
 - measures
 - retention
-- **proofs**
-- **oembed**
+- [x] **proofs**
+- [x] **oembed**
 
 
 # log
@@ -179,6 +186,5 @@ patch = update selected
 post = update all ?
 
 accept在哪里。**
-
 
 
