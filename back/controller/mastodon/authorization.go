@@ -6,16 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthChecker() gin.HandlerFunc {
+func authChecker() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authorization := c.GetHeader("Authorization") // TODO
-		authorizationID := AuthToID(authorization)
+		authorizationID := authToID(authorization)
 		c.Set("authorizationID", authorizationID)
 		c.Next()
 	}
 }
 
-func AuthToID(auth string) string {
+func authToID(auth string) string {
 	id := strings.TrimPrefix(auth, "Barer ")
 	return id
 }

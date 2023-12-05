@@ -1,3 +1,5 @@
+github.com/Hana-ame/go-form-phaser v0.0.0-20231113015314-815a9d5b215f h1:pWJ54E+QgfPeQstP0k4Le6wfSvzoPxG/uO6okvmv9i0=
+github.com/Hana-ame/go-form-phaser v0.0.0-20231113015314-815a9d5b215f/go.mod h1:b/jBJduOWXQP3oey64d7kRzjRZ6dz9U3nqQOywyfxxE=
 github.com/KyleBanks/depth v1.2.1 h1:5h8fQADFrWtarTdtDudMmGsC7GPbOAu6RVB3ffsVFHc=
 github.com/KyleBanks/depth v1.2.1/go.mod h1:jzSb9d0L43HxTQfT+oSA1EEp2q+ne2uh6XgeJcm8brE=
 github.com/PuerkitoBio/purell v1.2.0 h1:/Jdm5QfyM8zdlqT6WVZU4cfP23sot6CEHA4CS49Ezig=

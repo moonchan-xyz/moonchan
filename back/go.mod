@@ -3,6 +3,7 @@ module github.com/moonchan-xyz/moonchan/back
 go 1.20
 
 require (
+	github.com/Hana-ame/go-form-phaser v0.0.0-20231113015314-815a9d5b215f // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.2.0 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect

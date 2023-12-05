@@ -39,11 +39,31 @@ func (fe *formExactor) String(key string) *string {
 	ps := extractStringFromFormData(key, fe.Form)
 	return ps
 }
+func (fe *formExactor) DefaultString(key string, d string) string {
+	ps := extractStringFromFormData(key, fe.Form)
+	s := defaultString(ps, d)
+	return s
+}
 
 func (fe *formExactor) Bool(key string) *bool {
 	ps := extractStringFromFormData(key, fe.Form)
 	pb := extractBoolPtrFromStringPtr(ps)
 	return pb
+}
+func (fe *formExactor) DefaultBool(key string, d bool) bool {
+	ps := extractStringFromFormData(key, fe.Form)
+	pb := extractBoolPtrFromStringPtr(ps)
+	b := defaultBool(pb, d)
+	return b
+}
+
+func (fe *formExactor) DefaultInt(key string, d int) int {
+	ps := extractStringFromFormData(key, fe.Form)
+	if ps == nil {
+		return d
+	}
+	i := mustAtoi(*ps, d)
+	return i
 }
 
 func (fe *formExactor) Hash(key string) entities.Hash {

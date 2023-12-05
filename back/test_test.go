@@ -7,6 +7,8 @@ import (
 	"os"
 	"testing"
 
+	formphaser "github.com/Hana-ame/go-form-phaser"
+
 	"github.com/joho/godotenv"
 )
 
@@ -33,4 +35,20 @@ func TestEnv(t *testing.T) {
 	secretKey := os.Getenv("SECRET_KEY")
 
 	fmt.Println(s3Bucket, secretKey)
+}
+
+func TestFormphaser(t *testing.T) {
+	type C struct {
+		A int    `formphaser:"aaa"`
+		B string `formphaser:"bbb"`
+	}
+	type O struct {
+		A int      `formphaser:"aaa"`
+		B string   `formphaser:"bbb"`
+		C C        `formphaser:"ccc"`
+		D []string `formphaser:"ddd"`
+	}
+	o := O{}
+	formphaser.Unmarshal(func(s string) []string { return []string{s} }, &o)
+	fmt.Printf("%+v\n", o)
 }
