@@ -1,4 +1,8 @@
-# TODO
+- [ ] mastodon-api-parser
+  - [ ] 需要做出swaggger和gin和接口
+  - 请关注那个repo中的readme的开头
+
+# core的TODO，早了
 
 配置好swag，让网页能显示api
 检查下webfinger？也能直接捅db
@@ -16,8 +20,10 @@ db可以不用加字段而是加外键来着
 
 ~~auth改个中间件出来改了没啊。~~改出来了
 `mastodon/*`的api未实现
-*注：流程是`controller/*`写好解析，然后再在`mastodon/*`加上框架，//todo和return nil*
-*写完记得文档和`main.go`记一笔*
+**注：流程是`controller/*`写好解析，然后再在`mastodon/*`加上框架，//todo和return nil**
+**写完记得文档和`main.go`记一笔**
+
+## 目前的进度
 
 hint: mastodon api document 带缩进的是不是大包的。
 
@@ -55,6 +61,10 @@ flow
 
 
     - [ ] 
+
+
+目前在mastodon-api-phaser的repo里面工作。
+做了些啥啊。。。
 
 ## readme
 

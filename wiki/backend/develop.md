@@ -3,14 +3,14 @@
 在laptop上一共有两个project
 moonchan和moonchan-wiki
 分别是代码和文档
-目前暂时在写后端的代码，所以code根目录设置成了moonchan/back，不然会golang开始发疯
+目前暂时在写后端的代码，所以code根目录设置成了`moonchan/back`，不然会golang开始发疯
 自宅电脑就不懂了
 很多没跑起来所以暂时不知道
 比如db的位置之类的
 
 这里记录设想的部分
 
-## 目录结构
+## 目录结构(暂时未更新，请看下面单独分立的部分，latest)
 
 - controller
   - mastodon
@@ -88,15 +88,35 @@ gin解析
 
 
 
-## mastodon/*
+## mastodon api
 ```txt
 http ---gin---> params --------------> functions
-        ┌─────────────────────────┐    ┌────────────────┐
-        │                         │    │                │
-api ───►│   controller/mastodon   ├───►│   mastodon/*   │
-        │                         │    │                │
-        └─────────────────────────┘    └────────────────┘
+        ┌──────────┐    ┌───────────────────────────┐    ┌───────────────────┐
+        │          │    │                           │    │                   │
+api ───►│   main   ├───►│   controller/mastodon/*   ├───►│     mastodon/*    │
+        │          │    │                           │    │                   │
+        └──────────┘    └───────────────────────────┘    └───────────────────┘
 ```
+
+### `controller/hash.go`
+
+将gin中的params放到Hash当中
+
+### `mastodon/*`
+
+在子文件夹当中处理，传入参数为 mastodon.Hash
+
+传到controller里面的时候用api
+
+### `mastodon/hash.go`
+
+interface Hash 所在
+
+### TODO
+
+是否要放到一个文件夹里面
+
+*mastodon.status.Api...*
 
 ~~@[UpdateCredentials](/back/controller/mastodon/accounts.go)~~
 ~~需要处理auth的header~~
