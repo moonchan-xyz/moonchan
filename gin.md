@@ -14,6 +14,8 @@
 
 ## accept params
 
+how to get params from different inputs 
+
 ### header
 - GetHeader
 - Cookie

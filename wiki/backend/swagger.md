@@ -1,3 +1,11 @@
+# ref
+
+[post json](https://github.com/go-swagger/go-swagger/issues/1772)
+
+[example](https://github.com/swaggo/swag/blob/e769bbe213c871a10c6fc64f64dfce47cddce40f/testdata/simple2/api/api.go)
+
+# 流程
+
 https://goswagger.io/about.html
 
 [follow](https://github.com/swaggo/gin-swagger)

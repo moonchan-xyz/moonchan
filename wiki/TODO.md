@@ -1,6 +1,3 @@
-- [ ] mastodon-api-parser
-  - [ ] 需要做出swaggger和gin和接口
-  - 请关注那个repo中的readme的开头
 
 # core的TODO，早了
 
